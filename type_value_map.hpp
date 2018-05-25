@@ -12,17 +12,24 @@ namespace type_value_map {
 
     namespace detail {
         template<typename Tag, auto Val>
-        struct TagValuePair;
+        struct TagValuePair {
+            static constexpr auto value = Val;
+            static TagValuePair get_pair(Tag); //empty declaration bc decltype usage only
+        };
 
-        template<typename TagType, typename ValueType, ValueType val>
+        //Type-tagged version
+        template<typename TagType, typename ValueType, auto val>
         struct TagValuePair<Tag<TagType,ValueType>,val> {
-            static constexpr ValueType value = val;
+            static constexpr auto value = ValueType(val);
             static TagValuePair get_pair(TagType); //empty declaration bc decltype usage only
         };
+
+        template<typename Tag>
+        using get_tag_type = typename Tag::tag_type;
     }
 
     template<typename Tag, auto Val>
-    using pair = detail::TagValuePair<typename Tag::tag_type,static_cast<typename Tag::value_type>(Val)>;
+    using pair = detail::TagValuePair<std::experimental::detected_or_t<Tag,detail::get_tag_type,Tag>,Val>;
 
     template<typename... Pairs>
     struct map : Pairs... {
