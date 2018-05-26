@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _H_TYPE_VALUE_MAP__
+#define _H_TYPE_VALUE_MAP__
 
 #include <utility>
 #include <experimental/type_traits>
@@ -58,3 +59,5 @@ namespace type_value_map {
         using insert = map<Pairs...,newPairs...>;
     };
 }
+
+#endif
