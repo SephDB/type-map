@@ -13,6 +13,7 @@ namespace type_value_map {
     namespace detail {
         template<typename Tag, auto Val>
         struct TagValuePair {
+            using key = Tag;
             static constexpr auto value = Val;
             static TagValuePair get_pair(Tag); //empty declaration bc decltype usage only
         };
@@ -20,6 +21,7 @@ namespace type_value_map {
         //Type-tagged version
         template<typename TagType, typename ValueType, auto val>
         struct TagValuePair<Tag<TagType,ValueType>,val> {
+            using key = TagType;
             static constexpr auto value = ValueType(val);
             static TagValuePair get_pair(TagType); //empty declaration bc decltype usage only
         };
@@ -42,6 +44,15 @@ namespace type_value_map {
 
         template<typename Tag>
         static constexpr auto get = get_pair_impl<Tag>::value;
+
+        template<template<typename...> typename Apply>
+        using pairs = Apply<Pairs...>;
+
+        template<template<typename...> typename Apply>
+        using keys = Apply<typename Pairs::key...>;
+
+        template<template<auto...> typename Apply>
+        using values = Apply<Pairs::value...>;
 
         template<typename... newPairs>
         using insert = map<Pairs...,newPairs...>;
