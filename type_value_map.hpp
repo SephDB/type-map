@@ -5,33 +5,33 @@
 
 namespace type_value_map {
     template<typename TagName,typename Value>
-    struct Tag {
-        using tag_type = Tag;
+    struct TypedKey {
+        using typed_key_type = TypedKey;
         using value_type = Value;
     };
 
     namespace detail {
-        template<typename Tag, auto Val>
-        struct TagValuePair {
-            using key = Tag;
+        template<typename Key, auto Val>
+        struct KeyValuePair {
+            using key = Key;
             static constexpr auto value = Val;
-            static TagValuePair get_pair(Tag); //empty declaration bc decltype usage only
+            static KeyValuePair get_pair(Key); //empty declaration bc decltype usage only
         };
 
-        //Type-tagged version
-        template<typename TagType, typename ValueType, auto val>
-        struct TagValuePair<Tag<TagType,ValueType>,val> {
-            using key = TagType;
+        //Type-safe key version
+        template<typename Key, typename ValueType, auto val>
+        struct KeyValuePair<TypedKey<Key,ValueType>,val> {
+            using key = KeyValuePair;
             static constexpr auto value = ValueType(val);
-            static TagValuePair get_pair(TagType); //empty declaration bc decltype usage only
+            static KeyValuePair get_pair(Key); //empty declaration bc decltype usage only
         };
 
-        template<typename Tag>
-        using get_tag_type = typename Tag::tag_type;
+        template<typename Key>
+        using get_typed_key = typename Key::typed_key_type;
     }
 
-    template<typename Tag, auto Val>
-    using pair = detail::TagValuePair<std::experimental::detected_or_t<Tag,detail::get_tag_type,Tag>,Val>;
+    template<typename Key, auto Val>
+    using pair = detail::KeyValuePair<std::experimental::detected_or_t<Key,detail::get_typed_key,Key>,Val>;
 
     template<typename... Pairs>
     struct map : Pairs... {
