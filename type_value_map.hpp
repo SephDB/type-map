@@ -5,7 +5,7 @@
 #include <experimental/type_traits>
 
 namespace type_value_map {
-    template<typename TagName,typename Value>
+    template<typename Key,typename Value>
     struct TypedKey {
         using typed_key_type = TypedKey;
         using value_type = Value;
@@ -37,14 +37,14 @@ namespace type_value_map {
     template<typename... Pairs>
     struct map : Pairs... {
         using Pairs::get_pair...;
-        template<typename Tag>
-        using get_pair_impl = decltype(map::get_pair(std::declval<Tag>()));
+        template<typename Key>
+        using get_pair_impl = decltype(map::get_pair(std::declval<Key>()));
 
-        template<typename Tag>
-        static constexpr bool has = std::experimental::is_detected_v<get_pair_impl,Tag>;
+        template<typename Key>
+        static constexpr bool has = std::experimental::is_detected_v<get_pair_impl,Key>;
 
-        template<typename Tag>
-        static constexpr auto get = get_pair_impl<Tag>::value;
+        template<typename Key>
+        static constexpr auto get = get_pair_impl<Key>::value;
 
         template<template<typename...> typename Apply>
         using pairs = Apply<Pairs...>;
