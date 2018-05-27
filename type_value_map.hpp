@@ -40,6 +40,9 @@ namespace type_value_map {
         template<typename Key>
         using get_pair_impl = decltype(map::get_pair(std::declval<Key>()));
 
+        static constexpr bool empty = sizeof...(Pairs) == 0;
+        static constexpr auto size = sizeof...(Pairs);
+
         template<typename Key>
         static constexpr bool has = std::experimental::is_detected_v<get_pair_impl,Key>;
 
