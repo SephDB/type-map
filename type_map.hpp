@@ -42,7 +42,7 @@ namespace type_map {
         using insert = tt_map<Pairs...,newPairs...>;
     };
 
-    template<typename Key,typename Value>
+    template<typename Value>
     struct TypedKey {
         using typed_key_type = TypedKey;
         using value_type = Value;
@@ -53,9 +53,9 @@ namespace type_map {
         struct CheckedValue {
             static constexpr auto value = Val;
         };
-        template<typename Key, typename ValType, ValType val>
-        struct CheckedValue<TypedKey<Key,ValType>,val> {
-            static constexpr auto value = val;
+        template<typename ValType, auto val>
+        struct CheckedValue<TypedKey<ValType>,val> {
+            static constexpr ValType value = val;
         };
 
         template<typename Key>
