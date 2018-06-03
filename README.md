@@ -30,7 +30,7 @@ using type_map::tv_pair,type_map::tv_map,type_map::CheckedType
 struct A : TypedKey<int> {};
 struct B {};
 
-using my_map = tv_map<tv_pair<A,1>,tv_pair<B,>>;
+using my_map = tv_map<tv_pair<A,1>,tv_pair<B,false>>;
 
 static_assert(m::template get<A> == 1);
 ```
