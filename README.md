@@ -55,3 +55,5 @@ static_assert(m::template get<A> == 1);
   - Adds key,value pairs to the map. Duplicate keys cause undefined behaviour.
 - erase<Key>
   - Removes the element with the key Key(if present, no-op if not).
+- insert_or_assign<newPair>
+  - Inserts a new key,value pair or replaces the existing key,value pair with the same key

@@ -76,6 +76,9 @@ namespace type_map {
         //detected_t to allow no-op erasing of non-existant keys
         template<typename Key>
         using erase = detail::type_ops::remove_unique_t<tt_map,std::experimental::detected_t<tt_map::get_pair_impl,Key>,Pairs...>;
+
+        template<typename newPair>
+        using insert_or_assign = typename tt_map::template erase<typename newPair::key>::template insert<newPair>;
     };
 
     template<typename Value>
