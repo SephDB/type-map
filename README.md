@@ -53,3 +53,5 @@ static_assert(m::template get<A> == 1);
   - For type->value map: applies all values to template<auto...>class Op
 - insert<newPairs...>
   - Adds key,value pairs to the map. Duplicate keys cause undefined behaviour.
+- erase<Key>
+  - Removes the element with the key Key(if present, no-op if not).
