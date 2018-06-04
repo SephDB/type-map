@@ -55,6 +55,9 @@ namespace type_map {
         template<typename Key>
         using get_pair_impl = decltype(tt_map::get_pair(std::declval<Key>()));
 
+        template<template<class...>class Op>
+        using apply_pairs = Op<Pairs...>;
+
         static constexpr bool empty = sizeof...(Pairs) == 0;
         static constexpr auto size = sizeof...(Pairs);
 
@@ -106,6 +109,9 @@ namespace type_map {
     template<typename... Pairs>
     struct tv_map : tt_map<Pairs...> {
         using parent = tt_map<Pairs...>;
+        template<template<class...>class Op,class... Args>
+        using mimic_tt = typename Op<Args...>::template apply_pairs<tv_map>;
+
         template<typename Key>
         static constexpr auto get = parent::template get<Key>::value;
 
@@ -114,6 +120,12 @@ namespace type_map {
 
         template<typename... newPairs>
         using insert = tv_map<Pairs...,newPairs...>;
+
+        template<typename Key>
+        using erase = mimic_tt<parent::template erase,Key>;
+
+        template<typename newPair>
+        using insert_or_assign = mimic_tt<parent::template insert_or_assign,newPair>;
     };
 }
 
